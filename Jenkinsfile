@@ -23,8 +23,9 @@ pipeline {
             steps {
                 echo 'Stopping and removing any existing container'
                 script {
-                    bat 'docker stop devops-demo || echo "no container to stop"'
-                    bat 'docker rm devops-demo || echo "no container to remove"'
+                    // ensure errors are ignored so the stage doesn't fail if container missing
+                    bat 'docker stop devops-demo || (echo "no container to stop" & exit /b 0)'
+                    bat 'docker rm devops-demo || (echo "no container to remove" & exit /b 0)'
                 }
             }
         }
