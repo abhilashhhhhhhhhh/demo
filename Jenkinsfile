@@ -34,6 +34,9 @@ pipeline {
             steps {
                 echo 'Running new container from fresh image'
                 script {
+                    // ensure no other container is using port 9090
+                    bat 'for /f "tokens=*" %%i in (\'docker ps -aq -f "publish=9090"\') do docker rm -f %%i || echo no-port-9090'
+                    // try to start container; if port conflict remains the build will still fail
                     bat 'docker run -d -p 9090:80 --name devops-demo devops-demo'
                 }
             }
