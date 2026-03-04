@@ -13,7 +13,8 @@ pipeline {
             steps {
                 echo 'Building Docker image devops-demo'
                 script {
-                    sh 'docker build -t devops-demo .'
+                    // use Windows batch since Jenkins node is Windows
+                    bat 'docker build -t devops-demo .'
                 }
             }
         }
@@ -22,8 +23,8 @@ pipeline {
             steps {
                 echo 'Stopping and removing any existing container'
                 script {
-                    sh 'docker stop devops-demo || true'
-                    sh 'docker rm devops-demo || true'
+                    bat 'docker stop devops-demo || echo "no container to stop"'
+                    bat 'docker rm devops-demo || echo "no container to remove"'
                 }
             }
         }
@@ -32,7 +33,7 @@ pipeline {
             steps {
                 echo 'Running new container from fresh image'
                 script {
-                    sh 'docker run -d -p 9090:80 --name devops-demo devops-demo'
+                    bat 'docker run -d -p 9090:80 --name devops-demo devops-demo'
                 }
             }
         }
